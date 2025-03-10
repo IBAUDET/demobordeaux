@@ -27,11 +27,9 @@ db.connect((err) => {
   console.log("Connecté à MySQL");
 });
 
-app.get("/user", (req, res) => {
-  db.query(
-    "SELECT * FROM users WHERE email = '" + req.query.email + "'",
-    (err, result) => {
-      if (err) throw err;
+app.get("/user", authMiddleware, (req, res) => {
+  db.query("SELECT * FROM users WHERE email = ?", [req.query.email], (err, result) => {
+if (err) throw err;
       res.json(result);
     }
   );
